@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon"
-      type="image/png"
-      href="images/robot-white.png">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
+		<link rel="icon"
+		type="image/png"
+		href="images/robot-white.png">
 
-    <title>Fun With Bots</title>
+		<title>Fun With Bots</title>
+		<link rel="stylesheet" href="css/app.css">
+		
+	</head>
+	<body>
+		<div id="app" class="container">
+			<div class="content">
+				<h1 class="site-header">Fun with<i class="fas fa-robot">s</i></h1>
+				{{-- <p class="site-url" >Try it! https://google.com</p> --}}
+				{{-- <botman-tinker api-endpoint="/botman"></botman-tinker> --}}
+			</div>
+		</div>
 
-	<link rel="stylesheet" href="css/app.css">
-
-</head>
-<body>
-<div class="container">
-    <div class="content">
-		<h1 style="color:white;font-size:80px;">Fun with <i class="fas fa-robot"></i>s</h1>
-
-        <script>
+		<script>
 			var botmanWidget = {
 				frameEndpoint: '/chat',
-				'title': 'Bot Window',
-				'introMessage': 'Welcome to "Fun With Bots"',
+				'title': 'Hello, welcome to:',
+				'introMessage': '"Jon Presents: Fun With Bots"',
 				'mainColor': '#2193b0',
 				'headerTextColor': '#ffffff',
 				'aboutText': '',
@@ -30,7 +34,7 @@
 				'displayMessageTime': true,
 				'desktopHeight': '1500'
 			};
-        </script>
+		</script>
 		<script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
 		<script>
 			function chat() {
@@ -38,7 +42,6 @@
 			}
 			window.onload = chat;
 		</script>
-    </div>
-</div>
-</body>
+		<script src="js/app.js"></script>
+	</body>
 </html>
