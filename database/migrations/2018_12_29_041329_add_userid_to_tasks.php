@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUseridToTodos extends Migration
+class AddUseridToTasks extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddUseridToTodos extends Migration
      */
     public function up()
     {
-        Schema::table('todos', function (Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             $table->string('user_id');
         });
     }
@@ -25,7 +25,7 @@ class AddUseridToTodos extends Migration
      */
     public function down()
     {
-        Schema::table('todos', function (Blueprint $table) {
+        Schema::table('tasks', function (Blueprint $table) {
             //
         });
     }

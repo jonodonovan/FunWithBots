@@ -1,5 +1,5 @@
 <?php
-use App\Todo;
+use App\task;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
 
@@ -49,96 +49,96 @@ $botman->hears('Survey', function ($bot) {
 });
 
 
-// Show all todos that are completed
-$botman->hears('Show to-dos', function ($bot) {
-    $todos = Todo::where('completed', false)->get();
+// Show all tasks that are completed
+$botman->hears('Show tasks', function ($bot) {
+    $tasks = Task::where('completed', false)->get();
     
-    if (count($todos) > 0) {
-        $bot->reply('Your to-dos are:');
-        foreach ($todos as $todo) {
-            $bot->reply($todo->id.' - '.$todo->task);
+    if (count($tasks) > 0) {
+        $bot->reply('Your tasks are:');
+        foreach ($tasks as $task) {
+            $bot->reply($task->id.' - '.$task->task);
         }
     } else {
-        $bot->reply('You do not have any to-dos.');
+        $bot->reply('You do not have any tasks.');
     }
 });
 
 
-// Add a todo inline
-$botman->hears('Add a new to-do {task}', function ($bot, $task) {
-    Todo::create([
+// Add a task inline
+$botman->hears('Add a new task called {task}', function ($bot, $task) {
+    Task::create([
         'task' => $task
     ]);
-    $bot->reply('You added a new to-do called "'.$task."'");
+    $bot->reply('You added a new task called "'.$task."'");
 });
 
 
-// Add a todo with a conversation
-$botman->hears('Add a to-do', function ($bot) {
-    $bot->ask('What is the name of the new to-do?', function ($answer, $conversation) {
-        Todo::create([
+// Add a task with a conversation
+$botman->hears('Add a task', function ($bot) {
+    $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
+        Task::create([
             'task' => $answer,
             'user_id'   => $conversation->getBot()->getMessage()->getSender()
         ]);
-        $conversation->say('A new to-do was created, called "'.$answer."'");
+        $conversation->say('A new task was created, called "'.$answer."'");
     });
 });
 
 
-// Complete a todo 
-$botman->hears('To-do completed {id}', function ($bot, $id) {
-    $todo = Todo::find($id);
+// Complete a task 
+$botman->hears('Task completed {id}', function ($bot, $id) {
+    $task = Task::find($id);
 
-    if (is_null($todo)) {
-        $bot->reply('Sorry, I could not find the to-do with ID of "'.$id.'"');
+    if (is_null($task)) {
+        $bot->reply('Sorry, I could not find the task with ID of "'.$id.'"');
     } else {
-        $todo->completed = true;
-        $todo->save();
+        $task->completed = true;
+        $task->save();
 
-        $bot->reply('To-do "'.$todo->task.'" marked as completed');
+        $bot->reply('Task "'.$task->task.'" marked as completed');
     }
 });
 
 
-// Delete a todo 
-$botman->hears('Delete to-do {id}', function($bot, $id) {
-    $todo = Todo::find($id);
+// Delete a task 
+$botman->hears('Delete task {id}', function($bot, $id) {
+    $task = Task::find($id);
 
-    if (is_null($todo)) {
-        $bot->reply('Sorry, I could not find the to-do with ID of "'.$id.'"');
+    if (is_null($task)) {
+        $bot->reply('Sorry, I could not find the task with ID of "'.$id.'"');
     } else {
-        $todo->delete();
+        $task->delete();
 
-        $bot->reply('To-do "'.$todo->task.'" was deleted');
+        $bot->reply('Task "'.$task->task.'" was deleted');
     }
 });
 
 
-// Add a todo with a conversation with user ID
-$botman->hears('New to-do', function ($bot) {
-    $bot->ask('What is the name of the new to-do?', function ($answer, $conversation) {
-        Todo::create([
+// Add a task with a conversation with user ID
+$botman->hears('New task', function ($bot) {
+    $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
+        Task::create([
             'task'      => $answer,
             'user_id'   => $conversation->getBot()->getMessage()->getSender()
         ]);
-        $conversation->say('A new to-do was created, called "'.$answer."'");
+        $conversation->say('A new task was created, called "'.$answer."'");
     });
 });
 
 
-// Show only my todos
-$botman->hears('Show my to-dos', function ($bot) {
-    $todos = Todo::where('completed', false)
+// Show only my tasks
+$botman->hears('Show my tasks', function ($bot) {
+    $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
     
-    if (count($todos) > 0) {
-        $bot->reply('Your to-dos are:');
-        foreach ($todos as $todo) {
-            $bot->reply($todo->id.' - '.$todo->task);
+    if (count($tasks) > 0) {
+        $bot->reply('Your tasks are:');
+        foreach ($tasks as $task) {
+            $bot->reply($task->id.' - '.$task->task);
         }
     } else {
-        $bot->reply('You do not have any to-dos.');
+        $bot->reply('You do not have any tasks.');
     }
 });
 
@@ -171,17 +171,17 @@ $botman->hears('stop', function ($bot) {
 
 
 // Using Alexa
-$botman->hears('MyTodos', function ($bot) {
-    $todos = Todo::where('completed', false)
+$botman->hears('Mytasks', function ($bot) {
+    $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
     
-    if (count($todos) > 0) {
-        $bot->reply('Your to-dos are:');
-        foreach ($todos as $todo) {
-            $bot->reply($todo->id.' - '.$todo->task);
+    if (count($tasks) > 0) {
+        $bot->reply('Your tasks are:');
+        foreach ($tasks as $task) {
+            $bot->reply($task->id.' - '.$task->task);
         }
     } else {
-        $bot->reply('All your to-dos have been completed.');
+        $bot->reply('All your tasks have been completed.');
     }
 });
