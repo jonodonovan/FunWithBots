@@ -171,7 +171,7 @@ $botman->hears('stop', function ($bot) {
 
 
 // Using Alexa
-$botman->hears('Mytasks', function ($bot) {
+$botman->hears('MyTasks', function ($bot) {
     $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
@@ -184,4 +184,10 @@ $botman->hears('Mytasks', function ($bot) {
     } else {
         $bot->reply('All your tasks have been completed.');
     }
+});
+
+
+// Ordering Lunch
+$botman->hears('Lunch|OrderLunch', function ($bot) {
+    $bot->startConversation(new App\Conversations\LunchConversation);
 });

@@ -17,15 +17,14 @@ class Survey extends Conversation
     {
         $this->say('Welcome to the survey');
         $this->ask('What is your name?', function ($answer) {
-            $value = $answer->getText();
+            $this->name = $answer->getText();
 
-            if (trim($value) === '') {
+            if (trim($this->name) === '') {
                 return $this->repeat('This name does not look real! What is your name?');
-            } elseif (!preg_match("#^[a-zA-Z-'\s]+$#", $value)) {
+            } elseif (!preg_match("#^[a-zA-Z-'\s]+$#", $this->name)) {
                 return $this->repeat('This name does not look real! What is your name?');
             }
 
-            $this->name = $value;
             $this->say('Nice to meet you, '.$this->name);
 
             $this->askAge();
@@ -36,7 +35,7 @@ class Survey extends Conversation
     {
         $this->ask('What is your age?', function ($answer) {
             $this->age = $answer->getText();
-            $this->say('Your age is '.$this->age);
+            $this->say($this->name.', your age is '.$this->age.'?');
         });
     }
 }
