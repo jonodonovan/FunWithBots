@@ -23,7 +23,22 @@ class LunchConversation extends Conversation
             }
 
             $this->say('Nice to meet you, '.ucfirst($this->name));
-            $this->askOrder();
+            
+            $menu = Question::create('Here is the menu - google.com, reply with "Ready" to order')
+                ->addButtons([
+                    Button::create('Ready to order')->value('ready'),
+                    Button::create('Need more time')->value('needmoretime'),
+                ]);
+
+            $this->ask($menu, function ($answer) {
+                $this->continue = $answer->getText();
+    
+                if ($this->continue == 'ready') {
+                    $this->askOrder();
+                } elseif ($this->continue == 'needmoretime') {
+                    $this->say('Okay, the order will be submitted at 11am, please start the chat over again with "lunch" before then.');
+                }
+            });
         });
     }
 
@@ -65,7 +80,7 @@ class LunchConversation extends Conversation
     // Confirmation of the order without notes
     private function askConfirmOrderNoNotes()
     {
-        $this->say('Okay, I have a '.$this->order.' for '.$this->name);
+        $this->say('Okay, I have a '.$this->order.' with no additional notes for '.ucfirst($this->name));
         $this->ask('Is this correct? Yes or No?', function ($answer) {
             $answer = $answer->getText();
 
@@ -78,7 +93,7 @@ class LunchConversation extends Conversation
                     'order' => $this->order
                 ]);
 
-                $this->say('Your order was saved! '.$this->order.' for '.$this->name.'.');
+                $this->say('Your order was saved! '.$this->order.' for '.ucfirst($this->name).'.');
             }
         });
     }
@@ -98,7 +113,7 @@ class LunchConversation extends Conversation
                     'notes' => $this->note
                 ]);
 
-                $this->say('Your order was saved! '.$this->order.' with '.$this->note.' for '.$this->name.'.');
+                $this->say('Your order was saved! '.$this->order.' with '.$this->note.' for '.ucfirst($this->name).'.');
             }
         });
     }
