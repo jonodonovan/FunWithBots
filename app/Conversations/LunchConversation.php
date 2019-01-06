@@ -35,7 +35,27 @@ class LunchConversation extends Conversation
         $this->ask('What would you like for lunch?', function ($answer) {
             $this->order = $answer->getText();
             $this->say('Okay, I have a '.$this->order.' for '.$this->name);
-            $this->askConfirmOrder();
+            $this->askNotes();
+        });
+    }
+
+    private function askNotes()
+    {
+        $this->ask('Any special notes for the order? For example, no cheese or green beans as the side? Yes or no?', function ($answer) {
+            $this->considerations = $answer->getText();
+
+            if ($this->considerations == 'yes') {
+                $this->ask('What are the considerations?', function ($answer) {
+                    $this->notes = $answer->getText();
+                    $this->say('Okay, I have a '.$this->order.' with '.$this->notes.' for '.$this->name);
+                    $this->askConfirmOrder();
+                });
+
+            } elseif ($this->considerations == 'no') {
+                $this->askOrder();
+            }
+            
+            
         });
     }
 
@@ -50,7 +70,8 @@ class LunchConversation extends Conversation
                 
                 Lunch::create([
                     'name'  => $this->name,
-                    'order' => $this->order
+                    'order' => $this->order,
+                    'notes' => $this->notes
                 ]);
 
                 $this->say('Your order was saved! '.$this->order.' for '.$this->name.'.');

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "553339cd729ff23002605ab8b862a2bb",
+    "content-hash": "b22bc45d25744e63c0371cd57393cb8f",
     "packages": [
         {
             "name": "botman/botman",
@@ -204,6 +204,63 @@
                 "facebook messenger"
             ],
             "time": "2018-10-04T06:45:12+00:00"
+        },
+        {
+            "name": "botman/driver-hangouts",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/botman/driver-hangouts.git",
+                "reference": "2e88f1a1589d4d09e5626652a42fef843eef5600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/botman/driver-hangouts/zipball/2e88f1a1589d4d09e5626652a42fef843eef5600",
+                "reference": "2e88f1a1589d4d09e5626652a42fef843eef5600",
+                "shasum": ""
+            },
+            "require": {
+                "botman/botman": "~2.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "botman/studio-addons": "~1.0",
+                "ext-curl": "*",
+                "illuminate/contracts": "~5.5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BotMan\\Drivers\\Hangouts\\Providers\\HangoutsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BotMan\\Drivers\\Hangouts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "m.pociot@gmail.com"
+                }
+            ],
+            "description": "Google Hangouts driver for BotMan",
+            "homepage": "http://github.com/botman/driver-hangouts",
+            "keywords": [
+                "Botman",
+                "Hangouts",
+                "bot"
+            ],
+            "time": "2018-03-07T19:32:54+00:00"
         },
         {
             "name": "botman/driver-telegram",
