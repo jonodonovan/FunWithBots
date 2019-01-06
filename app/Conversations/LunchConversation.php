@@ -3,15 +3,13 @@
 namespace App\Conversations;
 
 use App\Lunch;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class LunchConversation extends Conversation
 {
-    /**
-     * Start the conversation.
-     *
-     * @return mixed
-     */
+    // Start the conversation
     public function run()
     {
         $this->say('Let\'s order lunch!');
@@ -24,38 +22,64 @@ class LunchConversation extends Conversation
                 return $this->repeat('This name does not look real! What is your name?');
             }
 
-            $this->say('Nice to meet you, '.$this->name);
-
+            $this->say('Nice to meet you, '.ucfirst($this->name));
             $this->askOrder();
         });
     }
 
+    // Ask for order
     private function askOrder()
     {
-        $this->ask('What would you like for lunch?', function ($answer) {
+        $this->ask('What would you like for lunch today?', function ($answer) {
             $this->order = $answer->getText();
-            $this->say('Okay, I have a '.$this->order.' for '.$this->name);
+            $this->say('Okay, I have a '.$this->order.' for '.ucfirst($this->name));
             $this->askNotes();
         });
     }
 
+    // Ask for any special notes on the order
     private function askNotes()
     {
-        $this->ask('Any special notes for the order? For example, no cheese or green beans as the side? Yes or no?', function ($answer) {
-            $this->considerations = $answer->getText();
 
-            if ($this->considerations == 'yes') {
-                $this->ask('What are the considerations?', function ($answer) {
-                    $this->notes = $answer->getText();
-                    $this->say('Okay, I have a '.$this->order.' with '.$this->notes.' for '.$this->name);
+        $question = Question::create('Any special notes for the order? For example, no cheese or green beans as the side. Yes or no?')
+            ->addButtons([
+                Button::create('Yes')->value('yes'),
+                Button::create('No')->value('no'),
+            ]);
+
+        $this->ask($question, function ($answer) {
+            $this->notes = $answer->getText();
+
+            if ($this->notes == 'yes') {
+                $this->ask('What are the notes?', function ($answer) {
+                    $this->note = $answer->getText();
+                    $this->say('Okay, I have a '.$this->order.' with '.$this->note.' for '.ucfirst($this->name));
                     $this->askConfirmOrder();
                 });
-
-            } elseif ($this->considerations == 'no') {
-                $this->askOrder();
+            } elseif ($this->notes == 'no') {
+                $this->askConfirmOrderNoNotes();
             }
-            
-            
+        });
+    }
+
+    // Confirmation of the order without notes
+    private function askConfirmOrderNoNotes()
+    {
+        $this->say('Okay, I have a '.$this->order.' for '.$this->name);
+        $this->ask('Is this correct? Yes or No?', function ($answer) {
+            $answer = $answer->getText();
+
+            if ($answer == 'no') {
+                $this->askOrder();
+            } else {
+                
+                Lunch::create([
+                    'name'  => $this->name,
+                    'order' => $this->order
+                ]);
+
+                $this->say('Your order was saved! '.$this->order.' for '.$this->name.'.');
+            }
         });
     }
 
@@ -71,10 +95,10 @@ class LunchConversation extends Conversation
                 Lunch::create([
                     'name'  => $this->name,
                     'order' => $this->order,
-                    'notes' => $this->notes
+                    'notes' => $this->note
                 ]);
 
-                $this->say('Your order was saved! '.$this->order.' for '.$this->name.'.');
+                $this->say('Your order was saved! '.$this->order.' with '.$this->note.' for '.$this->name.'.');
             }
         });
     }

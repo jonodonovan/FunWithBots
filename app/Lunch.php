@@ -8,6 +8,7 @@ class Lunch extends Model
 {
     protected $fillable = [
         'name',
-        'order'
+        'order',
+        'notes'
     ];
 }
