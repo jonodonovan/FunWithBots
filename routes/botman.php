@@ -14,7 +14,7 @@ $botman->hears('Hi', function ($bot) {
 
 // Using variables
 $botman->hears('My name is (.*)', function ($bot, $name) {
-    $bot->reply('Hello '.$name.'!');
+    $bot->reply('Hello '.ucfirst($name).'!');
 });
 
 

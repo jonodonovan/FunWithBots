@@ -14,10 +14,14 @@
 	</head>
 	<body>
 		<div id="app" class="container">
-			<div class="content">
-				<h1 class="site-header">Fun with<i class="fas fa-robot">s</i></h1>
-				{{-- <p class="site-url" >Try it! https://google.com</p> --}}
-				{{-- <botman-tinker api-endpoint="/botman"></botman-tinker> --}}
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content">
+						<h1 class="site-header">Fun with<i class="fas fa-robot">s</i></h1>
+						{{-- <p class="site-url" >Try it! https://google.com</p> --}}
+						{{-- <botman-tinker api-endpoint="/botman"></botman-tinker> --}}
+					</div>
+				</div>
 			</div>
 		</div>
 

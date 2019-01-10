@@ -1,11 +1,9 @@
 body {
-	font-family: 'Gloria Hallelujah', cursive;
 	margin: 0;
 	padding: 0;
 	background: #2193b0;  /* fallback for old browsers */
 	background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
 }
 
 .container {
@@ -49,30 +47,38 @@ body {
 }
 
 .site-header {
+	font-family: 'Gloria Hallelujah', cursive;
 	color:#fff;
-	font-size:130px;
 	display: inline-block;
-}
-.site-header:before {
-	content: "";
-	position: absolute;
-	margin-top: 16px;
-	margin-left: -40px;
-	height: 117px;
-    width: 900px;
-	background-image: linear-gradient(-100deg, rgba(255, 255, 255, 0), #2292b0 85%, rgba(255, 255, 255, 0));
-	transform: rotate(-4deg) skew(-30deg);
-	z-index: -1;
-}
-.site-header-s {
-	
 }
 .site-header .fa-robot {
 	color:#fff;
 	padding-left:45px;
 }
-
 .site-url {
 	font-family: 'Roboto', sans-serif;
 	font-size: 46px;
 }
+
+
+.site-header {
+	font-size: 130px;
+  }
+  
+  @include media-breakpoint-up(sm) {
+	.site-header {
+		font-size: 80px;
+	}
+  }
+  
+  @include media-breakpoint-up(md) {
+	.site-header {
+		font-size: 100px;
+	}
+  }
+  
+  @include media-breakpoint-up(lg) {
+	.site-header {
+		font-size: 130px;
+	}
+  }
