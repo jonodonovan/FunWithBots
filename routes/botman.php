@@ -191,3 +191,9 @@ $botman->hears('MyTasks', function ($bot) {
 $botman->hears('Lunch|OrderLunch', function ($bot) {
     $bot->startConversation(new App\Conversations\LunchConversation);
 });
+
+
+// Fallback
+$botman->fallback(function($bot) {
+    $bot->reply('Sorry, I did not understand these commands!');
+});
