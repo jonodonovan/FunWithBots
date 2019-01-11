@@ -155,21 +155,6 @@ $botman->hears('stop', function ($bot) {
 })->stopsConversation();
 
 
-// Getting weather using AI
-// $dialogflow = Dialogflow::create('0d45c829ec3a427491778dadfe0fdcd1')->listenForAction();
-// $botman->middleware->received($dialogflow);
-
-// $botman->hears('weathersearch', function ($bot) {
-//     $extras = $bot->getMessage()->getExtras();
-//     $location = $extras['apiParameters']['geo-city'];
-
-//     $url = 'https://api.apixu.com/v1/current.json?key=4d64a49597bb4db18b4233225182812&q='.urlencode($location);
-//     $response = json_decode(file_get_contents($url));
-//     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
-//     $bot->reply('With a condition of '.$response->current->condition->text);
-// })->middleware($dialogflow);
-
-
 // Using Alexa
 $botman->hears('MyTasks', function ($bot) {
     $tasks = Task::where('completed', false)
@@ -195,5 +180,5 @@ $botman->hears('Lunch|OrderLunch', function ($bot) {
 
 // Fallback
 $botman->fallback(function($bot) {
-    $bot->reply('Sorry, I did not understand these commands!');
+    $bot->reply('Hey Facebook tester, please read my notes. That command has not been added.');
 });

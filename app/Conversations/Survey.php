@@ -35,7 +35,7 @@ class Survey extends Conversation
     {
         $this->ask('What is your age?', function ($answer) {
             $this->age = $answer->getText();
-            $this->say($this->name.', your age is '.$this->age.'?');
+            $this->say($this->name.', your age is '.$this->age.'. Thanks for taking the survey.');
         });
     }
 }
