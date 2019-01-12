@@ -143,12 +143,6 @@ $botman->hears('Show my tasks', function ($bot) {
 });
 
 
-// Adding a Help option
-$botman->hears('help', function ($bot) {
-    $bot->reply('How can I help you?');
-})->skipsConversation();
-
-
 // Stopping a conversation
 $botman->hears('stop', function ($bot) {
     $bot->reply('Conversation stopped');
@@ -178,7 +172,13 @@ $botman->hears('Lunch|OrderLunch', function ($bot) {
 });
 
 
+// Help Menu
+$botman->hears('help', function ($bot) {
+    $bot->reply('Say something like "Hi" or "My name is..."');
+});
+
+
 // Fallback
 $botman->fallback(function($bot) {
-    $bot->reply('Hey Facebook tester, please read my notes. That command has not been added.');
+    $bot->reply('Try another command or type "help". That command has not been added.');
 });
