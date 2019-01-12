@@ -173,12 +173,12 @@ $botman->hears('Lunch|OrderLunch', function ($bot) {
 
 
 // Help Menu
-$botman->hears('help', function ($bot) {
+$botman->hears('start|help|menu|what can you do', function ($bot) {
     $bot->reply('Say something like "Hi" or "My name is..."');
 });
 
 
 // Fallback
 $botman->fallback(function($bot) {
-    $bot->reply('Try another command or type "help". That command has not been added.');
+    $bot->reply('Hey Facebook tester, please read my notes.');
 });
