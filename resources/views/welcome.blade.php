@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<link rel="icon"
 		type="image/png"
@@ -10,10 +10,18 @@
 
 		<title>Fun With Bots</title>
 		<link rel="stylesheet" href="css/app.css">
+		<style>
+			html,
+			body {
+				height: 100%;
+				width: 100%;
+				overflow: auto;
+			}
+		</style>
 		
 	</head>
 	<body>
-		<div id="app" class="container">
+		<div id="app" class="container welcome">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="content">

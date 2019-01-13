@@ -5,53 +5,39 @@ use App\Http\Controllers\BotManController;
 
 $botman = resolve('botman');
 
-
-// Simple example
+// ---------------------------------------
+// Simple Chat ------------------
+// ---------------------------------------
 $botman->hears('Hi', function ($bot) {
     $bot->reply('Hello!');
 });
 
 
-// Using variables
+// ---------------------------------------
+// Campturing User Response ---------
+// ---------------------------------------
 $botman->hears('My name is (.*)', function ($bot, $name) {
     $bot->reply('Hello '.ucfirst($name).'!');
 });
 
 
-// Get current weather
-$botman->hears('Weather in {location}', function ($bot, $location) {
-    $url = 'https://api.apixu.com/v1/current.json?key=4d64a49597bb4db18b4233225182812&q='.urlencode($location);
-    $response = json_decode(file_get_contents($url));
-    $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
-    $bot->reply('With a condition of '.$response->current->condition->text);
+// Add a task with a conversation
+$botman->hears('Add a task', function ($bot) {
+    $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
+        Task::create([
+            'task'      => $answer,
+            'user_id'   => $conversation->getBot()->getMessage()->getSender()
+        ]);
+        $conversation->say('A new task was created, called "'.$answer."'");
+    });
 });
 
 
-// Get forecast for multiple days
-$botman->hears('{days} day forecast in {location}', function ($bot, $days, $location) {
-    
-    $url = 'https://api.apixu.com/v1/forecast.json?key=4d64a49597bb4db18b4233225182812&q='.urlencode($location).'&days='.urlencode($days);
-    $response = json_decode(file_get_contents($url));
-    $bot->reply('Temperature in '.$response->location->name.' for the next '.$days.' days:');
-    
-    foreach ($response->forecast->forecastday as $forecastday) {
-        $bot->reply(date('D', $forecastday->date_epoch).' the '.date('jS', $forecastday->date_epoch).' is '.strval($forecastday->day->maxtemp_f));
-    }
-});
-
-
-// Start a new conversation
-$botman->hears('Party time', BotManController::class.'@startConversation');
-
-// Start a new conversation 2
-$botman->hears('Survey', function ($bot) {
-    $bot->startConversation(new App\Conversations\Survey);
-});
-
-
-// Show all tasks that are completed
-$botman->hears('Show tasks', function ($bot) {
-    $tasks = Task::where('completed', false)->get();
+// Show only my tasks
+$botman->hears('Show my tasks', function ($bot) {
+    $tasks = Task::where('completed', false)
+        ->where('user_id', $bot->getMessage()->getSender())
+        ->get();
     
     if (count($tasks) > 0) {
         $bot->reply('Your tasks are:');
@@ -61,27 +47,6 @@ $botman->hears('Show tasks', function ($bot) {
     } else {
         $bot->reply('You do not have any tasks.');
     }
-});
-
-
-// Add a task inline
-$botman->hears('Add a new task called {task}', function ($bot, $task) {
-    Task::create([
-        'task' => $task
-    ]);
-    $bot->reply('You added a new task called "'.$task."'");
-});
-
-
-// Add a task with a conversation
-$botman->hears('Add a task', function ($bot) {
-    $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
-        Task::create([
-            'task' => $answer,
-            'user_id'   => $conversation->getBot()->getMessage()->getSender()
-        ]);
-        $conversation->say('A new task was created, called "'.$answer."'");
-    });
 });
 
 
@@ -114,42 +79,57 @@ $botman->hears('Delete task {id}', function($bot, $id) {
 });
 
 
-// Add a task with a conversation with user ID
-$botman->hears('New task', function ($bot) {
-    $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
-        Task::create([
-            'task'      => $answer,
-            'user_id'   => $conversation->getBot()->getMessage()->getSender()
-        ]);
-        $conversation->say('A new task was created, called "'.$answer."'");
-    });
+// ---------------------------------------
+// Conversations ---------
+// ---------------------------------------
+$botman->hears('Lunch|OrderLunch', function ($bot) {
+    $bot->startConversation(new App\Conversations\LunchConversation);
 });
 
 
-// Show only my tasks
-$botman->hears('Show my tasks', function ($bot) {
-    $tasks = Task::where('completed', false)
-        ->where('user_id', $bot->getMessage()->getSender())
-        ->get();
+// ---------------------------------------
+// Using APIs - Get current weather ---------
+// ---------------------------------------
+$botman->hears('Weather in {location}', function ($bot, $location) {
+    $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
+    $response = json_decode(file_get_contents($url));
+    $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
+    $bot->reply('With a condition of '.$response->current->condition->text);
+});
+
+
+// Get forecast for multiple days
+$botman->hears('{days} day forecast in {location}', function ($bot, $days, $location) {
+    $url = 'https://api.apixu.com/v1/forecast.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location).'&days='.urlencode($days);
+    $response = json_decode(file_get_contents($url));
+    $bot->reply('Temperature in '.$response->location->name.' for the next '.$days.' days:');
     
-    if (count($tasks) > 0) {
-        $bot->reply('Your tasks are:');
-        foreach ($tasks as $task) {
-            $bot->reply($task->id.' - '.$task->task);
-        }
-    } else {
-        $bot->reply('You do not have any tasks.');
+    foreach ($response->forecast->forecastday as $forecastday) {
+        $bot->reply(date('D', $forecastday->date_epoch).' the '.date('jS', $forecastday->date_epoch).' is '.strval($forecastday->day->maxtemp_f));
     }
 });
 
 
-// Stopping a conversation
-$botman->hears('stop', function ($bot) {
-    $bot->reply('Conversation stopped');
-})->stopsConversation();
+// ---------------------------------------
+// Using NPL ---------
+// ---------------------------------------
+$dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
+$botman->middleware->received($dialogflow);
+
+$botman->hears('weathersearch', function ($bot) {
+    $extras = $bot->getMessage()->getExtras();
+    $location = $extras['apiParameters']['geo-city'];
+
+    $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
+    $response = json_decode(file_get_contents($url));
+    $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
+    $bot->reply('With a condition of '.$response->current->condition->text);
+})->middleware($dialogflow);
 
 
-// Using Alexa
+// ---------------------------------------
+// Using Alexa ---------
+// ---------------------------------------
 $botman->hears('MyTasks', function ($bot) {
     $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
@@ -166,10 +146,24 @@ $botman->hears('MyTasks', function ($bot) {
 });
 
 
-// Ordering Lunch
-$botman->hears('Lunch|OrderLunch', function ($bot) {
-    $bot->startConversation(new App\Conversations\LunchConversation);
-});
+
+
+
+
+
+
+
+
+
+// ---------------------------------------
+// Support Commands ---------------
+// ---------------------------------------
+
+
+// Stopping a conversation
+$botman->hears('stop', function ($bot) {
+    $bot->reply('Conversation stopped');
+})->stopsConversation();
 
 
 // Help Menu
@@ -177,8 +171,53 @@ $botman->hears('start|help|menu|what can you do', function ($bot) {
     $bot->reply('Say something like "Hi" or "My name is..."');
 });
 
-
 // Fallback
 $botman->fallback(function($bot) {
-    $bot->reply('Hey Facebook tester, please read my notes.');
+    $bot->reply('Command not found.');
+});
+
+// ---------------------------------------
+// Not Used ---------------
+// ---------------------------------------
+
+// $botman->hears('Tell me something good', BotManController::class.'@startConversation');
+
+// // Start a new conversation 2
+// $botman->hears('Survey', function ($bot) {
+//     $bot->startConversation(new App\Conversations\Survey);
+// });
+
+// // Add a task with a conversation with user ID
+// $botman->hears('New task', function ($bot) {
+//     $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
+//         Task::create([
+//             'task'      => $answer,
+//             'user_id'   => $conversation->getBot()->getMessage()->getSender()
+//         ]);
+//         $conversation->say('A new task was created, called "'.$answer."'");
+//     });
+// });
+
+
+// Add a task inline
+$botman->hears('Add a new task called {task}', function ($bot, $task) {
+    Task::create([
+        'task' => $task
+    ]);
+    $bot->reply('You added a new task called "'.$task."'");
+});
+
+
+// Show all tasks that are completed
+$botman->hears('Show tasks', function ($bot) {
+    $tasks = Task::where('completed', false)->get();
+    
+    if (count($tasks) > 0) {
+        $bot->reply('Your tasks are:');
+        foreach ($tasks as $task) {
+            $bot->reply($task->id.' - '.$task->task);
+        }
+    } else {
+        $bot->reply('You do not have any tasks.');
+    }
 });

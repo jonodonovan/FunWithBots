@@ -4,6 +4,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('orders', 'LunchController@index')->name('orders.index');
+
 Route::get('/chat', function () {
     return view('chat');
 });
