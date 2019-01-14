@@ -139,8 +139,11 @@ $botman->hears('showtasks', function ($bot) {
     if (count($tasks) > 0) {
         
         foreach ($tasks as $task) {
-            $bot->reply($task->id.' - '.$task->task);
+            $result .= $task->id.' - '.$task->task;
         }
+
+        $bot->reply('Your tasks are:'.$result);
+
     } else {
         $bot->reply('All your tasks have been completed.');
     }
@@ -179,13 +182,21 @@ $botman->hears('stop', function ($bot) {
 
 
 // Help Menu
-$botman->hears('start|help|menu|what can you do', function ($bot) {
+$botman->hears('start|menu', function ($bot) {
     $bot->reply('Say something like "Hi" or "My name is..."');
+});
+
+// Facebook Tester Specific Commands
+$botman->hears('what can you do', function ($bot) {
+    $bot->reply('I do many things Alejandro, read my Facebook App submission notes for examples.');
+});
+$botman->hears('help', function ($bot) {
+    $bot->reply('What do you need help with? Say something like "Hi" or "My name is..."');
 });
 
 // Fallback
 $botman->fallback(function($bot) {
-    $bot->reply('Command not found.');
+    $bot->reply('Command not found. Say something like "Hi" or "My name is..."');
 });
 
 // ---------------------------------------
