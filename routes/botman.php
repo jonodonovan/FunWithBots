@@ -200,12 +200,12 @@ $botman->fallback(function($bot) {
 
 
 // Add a task inline
-// $botman->hears('Add a new task called {task}', function ($bot, $task) {
-//     Task::create([
-//         'task' => $task
-//     ]);
-//     $bot->reply('You added a new task called "'.$task."'");
-// });
+$botman->hears('Add a new task called {task}', function ($bot, $task) {
+    Task::create([
+        'task' => $task
+    ]);
+    $bot->reply('You added a new task called "'.$task."'");
+});
 
 
 // Show all tasks that are completed
