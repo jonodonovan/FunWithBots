@@ -138,11 +138,11 @@ $botman->hears('showtasks', function ($bot) {
     
     if (count($tasks) > 0) {
         
-        foreach ($tasks as $task) {
-            $result .= $task->task;
-        }
+        // foreach ($tasks as $task) {
+        //     $result .= $task->task;
+        // }
 
-        $bot->reply('Your tasks are:'.$result);
+        $bot->reply('Your tasks are:'.$tasks);
 
     } else {
         $bot->reply('All your tasks have been completed.');
