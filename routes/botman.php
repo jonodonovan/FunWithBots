@@ -150,13 +150,13 @@ $botman->hears('mytasks', function ($bot) {
 $botman->hears('addtask', function ($bot) {
 
     $slots = $bot->getMessage()->getExtras('slots');
-    $task = $slots['Amazon.EventType']['value'];
+    $task = $slots['Task']['value'];
 
     Task::create([
         'task' => $task
     ]);
 
-    $bot->reply('You added a new task called "'.$task."'");
+    $bot->reply('You added a new task called "'. $task ."'");
 });
 
 
