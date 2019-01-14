@@ -131,7 +131,7 @@ $botman->hears('{days} day forecast in {location}', function ($bot, $days, $loca
 // ---------------------------------------
 // Using Alexa ---------
 // ---------------------------------------
-$botman->hears('mytasks', function ($bot) {
+$botman->hears('showtasks', function ($bot) {
     $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
