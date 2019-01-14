@@ -139,7 +139,7 @@ $botman->hears('showtasks', function ($bot) {
     if (count($tasks) > 0) {
         
         foreach ($tasks as $task) {
-            $result .= $task->id.' - '.$task->task;
+            $result .= $task->task;
         }
 
         $bot->reply('Your tasks are:'.$result);
