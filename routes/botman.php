@@ -147,7 +147,17 @@ $botman->hears('mytasks', function ($bot) {
 });
 
 
+$botman->hears('addtask', function ($bot) {
 
+    $slots = $bot->getMessage()->getExtras('slots');
+    $task = $slots['Task']['value'];
+
+    Task::create([
+        'task' => $task
+    ]);
+
+    $bot->reply('You added a new task called "'.$task."'");
+});
 
 
 
@@ -201,12 +211,12 @@ $botman->fallback(function($bot) {
 
 
 // Add a task inline
-$botman->hears('Add a new task called {task}', function ($bot, $task) {
-    Task::create([
-        'task' => $task
-    ]);
-    $bot->reply('You added a new task called "'.$task."'");
-});
+// $botman->hears('Add a new task called {task}', function ($bot, $task) {
+//     Task::create([
+//         'task' => $task
+//     ]);
+//     $bot->reply('You added a new task called "'.$task."'");
+// });
 
 
 // Show all tasks that are completed
