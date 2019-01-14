@@ -3,6 +3,8 @@
 use App\Task;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
+use BotMan\Drivers\AmazonAlexa\Extensions\Card;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 $botman = resolve('botman');
 
@@ -141,9 +143,15 @@ $botman->hears('showtasks', function ($bot) {
         
         $results = '';
         foreach ($tasks as $key =>$task) {
-            $results .= $task->task.'<break time="3s"/>';
+            $results .= $task->task.'';
         }
-        $bot->reply('Your tasks are:<break time="3s"/>'.$results);
+        $card = Card::create('Your card title', 'Your card subtitle')
+            ->type(Card::STANDARD_CARD_TYPE)
+            ->image('https://botman.io/images/foo.png')
+            ->text('Your tasks are:'.$results);
+
+        $message = OutgoingMessage::create('This is the spoken response')->withAttachment($card);
+        $bot->reply($message);
 
     } else {
         $bot->reply('All your tasks have been completed.');
