@@ -143,14 +143,14 @@ $botman->hears('showtasks', function ($bot) {
         
         $results = '';
         foreach ($tasks as $key =>$task) {
-            $results .= $task->task.'';
+            $results .= $task->id.' - '.$task->task.",\n";
         }
-        $card = Card::create('Your card title', 'Your card subtitle')
+        $card = Card::create('Your tasks are:')
             ->type(Card::STANDARD_CARD_TYPE)
-            ->image('https://botman.io/images/foo.png')
-            ->text('Your tasks are:'.$results);
+            ->image('https://funwithbots.jodonovan.com/images/robot-light-blue.png')
+            ->text("\n".$results);
 
-        $message = OutgoingMessage::create('This is the spoken response')->withAttachment($card);
+        $message = OutgoingMessage::create('Your tasks are: '."\n".$results)->withAttachment($card);
         $bot->reply($message);
 
     } else {
@@ -171,6 +171,8 @@ $botman->hears('addtask', function ($bot) {
 
     $bot->reply('You added a new task called "'. $task ."'");
 });
+
+
 
 
 
