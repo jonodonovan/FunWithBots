@@ -8,7 +8,7 @@ $botman = resolve('botman');
 // ---------------------------------------
 // Simple Chat ------------------
 // ---------------------------------------
-$botman->hears('Hi', function ($bot) {
+$botman->hears('hi|hello|hey', function ($bot) {
     $bot->reply('Hello!');
 });
 
@@ -200,24 +200,24 @@ $botman->fallback(function($bot) {
 
 
 // Add a task inline
-$botman->hears('Add a new task called {task}', function ($bot, $task) {
-    Task::create([
-        'task' => $task
-    ]);
-    $bot->reply('You added a new task called "'.$task."'");
-});
+// $botman->hears('Add a new task called {task}', function ($bot, $task) {
+//     Task::create([
+//         'task' => $task
+//     ]);
+//     $bot->reply('You added a new task called "'.$task."'");
+// });
 
 
 // Show all tasks that are completed
-$botman->hears('Show tasks', function ($bot) {
-    $tasks = Task::where('completed', false)->get();
+// $botman->hears('Show tasks', function ($bot) {
+//     $tasks = Task::where('completed', false)->get();
     
-    if (count($tasks) > 0) {
-        $bot->reply('Your tasks are:');
-        foreach ($tasks as $task) {
-            $bot->reply($task->id.' - '.$task->task);
-        }
-    } else {
-        $bot->reply('You do not have any tasks.');
-    }
-});
+//     if (count($tasks) > 0) {
+//         $bot->reply('Your tasks are:');
+//         foreach ($tasks as $task) {
+//             $bot->reply($task->id.' - '.$task->task);
+//         }
+//     } else {
+//         $bot->reply('You do not have any tasks.');
+//     }
+// });
