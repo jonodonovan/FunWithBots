@@ -41,10 +41,11 @@ $botman->hears('Show my tasks', function ($bot) {
         ->get();
     
     if (count($tasks) > 0) {
-        $bot->reply('Your tasks are:');
-        foreach ($tasks as $task) {
-            $bot->reply($task->id.' - '.$task->task);
+        $results = '';
+        foreach ($tasks as $key =>$task) {
+            $results .= $task->task. '<br>';
         }
+        $bot->reply('Your tasks are: <br>'.$results);
     } else {
         $bot->reply('You do not have any tasks.');
     }
@@ -138,11 +139,11 @@ $botman->hears('showtasks', function ($bot) {
     
     if (count($tasks) > 0) {
         
-        // foreach ($tasks as $task) {
-        //     $result .= $task->task;
-        // }
-
-        $bot->reply('Your tasks are:'.$tasks);
+        $results = '';
+        foreach ($tasks as $key =>$task) {
+            $results .= $task->task. '<br>';
+        }
+        $bot->reply('Your tasks are: <br>'.$results);
 
     } else {
         $bot->reply('All your tasks have been completed.');
