@@ -141,9 +141,9 @@ $botman->hears('showtasks', function ($bot) {
         
         $results = '';
         foreach ($tasks as $key =>$task) {
-            $results .= $task->task. '\n';
+            $results .= $task->task. '<br/>';
         }
-        $bot->reply('Your tasks are: \n'.$results);
+        $bot->reply('Your tasks are: <br/>'.$results);
 
     } else {
         $bot->reply('All your tasks have been completed.');
