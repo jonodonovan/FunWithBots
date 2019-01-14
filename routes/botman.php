@@ -152,6 +152,11 @@ $botman->hears('addtask', function ($bot) {
     $slots = $bot->getMessage()->getExtras('slots');
     $task = $slots['Task']['value'];
 
+    Task::create([
+        'task'      => $task,
+        'user_id'   => $bot->getMessage()->getSender()
+    ]);
+
     $bot->reply('You added a new task called "'. $task ."'");
 });
 
