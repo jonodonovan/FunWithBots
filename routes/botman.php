@@ -1,5 +1,6 @@
 <?php
-use App\task;
+
+use App\Task;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
 
