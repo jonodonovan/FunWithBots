@@ -113,18 +113,18 @@ $botman->hears('{days} day forecast in {location}', function ($bot, $days, $loca
 // ---------------------------------------
 // Using NPL ---------
 // ---------------------------------------
-$dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
-$botman->middleware->received($dialogflow);
+// $dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
+// $botman->middleware->received($dialogflow);
 
-$botman->hears('weathersearch', function ($bot) {
-    $extras = $bot->getMessage()->getExtras();
-    $location = $extras['apiParameters']['geo-city'];
+// $botman->hears('weathersearch', function ($bot) {
+//     $extras = $bot->getMessage()->getExtras();
+//     $location = $extras['apiParameters']['geo-city'];
 
-    $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
-    $response = json_decode(file_get_contents($url));
-    $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
-    $bot->reply('With a condition of '.$response->current->condition->text);
-})->middleware($dialogflow);
+//     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
+//     $response = json_decode(file_get_contents($url));
+//     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
+//     $bot->reply('With a condition of '.$response->current->condition->text);
+// })->middleware($dialogflow);
 
 
 // ---------------------------------------
