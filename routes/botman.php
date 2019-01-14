@@ -130,7 +130,7 @@ $botman->hears('weathersearch', function ($bot) {
 // ---------------------------------------
 // Using Alexa ---------
 // ---------------------------------------
-$botman->hears('MyTasks', function ($bot) {
+$botman->hears('mytasks', function ($bot) {
     $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
