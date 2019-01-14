@@ -43,9 +43,9 @@ $botman->hears('Show my tasks', function ($bot) {
     if (count($tasks) > 0) {
         $results = '';
         foreach ($tasks as $key =>$task) {
-            $results .= $task->task. '<br>';
+            $results .= $task->task. '\n';
         }
-        $bot->reply('Your tasks are: <br>'.$results);
+        $bot->reply('Your tasks are: \n'.$results);
     } else {
         $bot->reply('You do not have any tasks.');
     }
