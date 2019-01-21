@@ -90,11 +90,15 @@ $botman->hears('Lunch|OrderLunch', function ($bot) {
     $bot->startConversation(new App\Conversations\LunchConversation);
 });
 
+$botman->hears('Survey', function ($bot) {
+    $bot->startConversation(new App\Conversations\SurveyConversation);
+});
+
 
 // ---------------------------------------
 // Using APIs - Get current weather ---------
 // ---------------------------------------
-$botman->hears('Weather in {location}', function ($bot, $location) {
+$botman->hears('Weather in {location}(.*)', function ($bot, $location) {
     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
     $response = json_decode(file_get_contents($url));
     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
@@ -112,23 +116,6 @@ $botman->hears('{days} day forecast in {location}', function ($bot, $days, $loca
         $bot->reply(date('D', $forecastday->date_epoch).' the '.date('jS', $forecastday->date_epoch).' is '.strval($forecastday->day->maxtemp_f));
     }
 });
-
-
-// ---------------------------------------
-// Using NPL ---------
-// ---------------------------------------
-// $dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
-// $botman->middleware->received($dialogflow);
-
-// $botman->hears('weathersearch', function ($bot) {
-//     $extras = $bot->getMessage()->getExtras();
-//     $location = $extras['apiParameters']['geo-city'];
-
-//     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
-//     $response = json_decode(file_get_contents($url));
-//     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
-//     $bot->reply('With a condition of '.$response->current->condition->text);
-// })->middleware($dialogflow);
 
 
 // ---------------------------------------
@@ -186,11 +173,20 @@ $botman->hears('addtask', function ($bot) {
 // ---------------------------------------
 
 
+// Other converdsations
+$botman->hears('how are you(.*)', function ($bot) {
+    $bot->startConversation(new App\Conversations\WelcomeConversation);
+});
+
+// Help Menu
+$botman->hears('your name|what\'s your name(.*)|what is your name(.*)', function ($bot) {
+    $bot->reply('Hello, I am the "Fun with Bots" bot.');
+});
+
 // Stopping a conversation
 $botman->hears('stop', function ($bot) {
     $bot->reply('Conversation stopped');
 })->stopsConversation();
-
 
 // Help Menu
 $botman->hears('start|menu', function ($bot) {
@@ -215,11 +211,6 @@ $botman->fallback(function($bot) {
 // ---------------------------------------
 
 // $botman->hears('Tell me something good', BotManController::class.'@startConversation');
-
-// // Start a new conversation 2
-// $botman->hears('Survey', function ($bot) {
-//     $bot->startConversation(new App\Conversations\Survey);
-// });
 
 // // Add a task with a conversation with user ID
 // $botman->hears('New task', function ($bot) {
@@ -255,3 +246,19 @@ $botman->fallback(function($bot) {
 //         $bot->reply('You do not have any tasks.');
 //     }
 // });
+
+// ---------------------------------------
+// Using NPL ---------
+// ---------------------------------------
+// $dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
+// $botman->middleware->received($dialogflow);
+
+// $botman->hears('weathersearch', function ($bot) {
+//     $extras = $bot->getMessage()->getExtras();
+//     $location = $extras['apiParameters']['geo-city'];
+
+//     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
+//     $response = json_decode(file_get_contents($url));
+//     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
+//     $bot->reply('With a condition of '.$response->current->condition->text);
+// })->middleware($dialogflow);

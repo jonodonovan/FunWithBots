@@ -2,9 +2,10 @@
 
 namespace App\Conversations;
 
+use App\Survey;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
-class Survey extends Conversation
+class SurveyConversation extends Conversation
 {
     protected $name;
     Protected $age;
@@ -25,7 +26,7 @@ class Survey extends Conversation
                 return $this->repeat('This name does not look real! What is your name?');
             }
 
-            $this->say('Nice to meet you, '.$this->name);
+            $this->say('Nice to meet you, '.ucfirst($this->name));
 
             $this->askAge();
         });
@@ -35,7 +36,13 @@ class Survey extends Conversation
     {
         $this->ask('What is your age?', function ($answer) {
             $this->age = $answer->getText();
-            $this->say($this->name.', your age is '.$this->age.'. Thanks for taking the survey.');
+
+            Survey::create([
+                'name'  => $this->name,
+                'age'   => $this->age
+            ]);
+
+            $this->say(ucfirst($this->name).', your age is '.$this->age.'. Thanks for taking the survey.');
         });
     }
 }
