@@ -9,7 +9,7 @@ use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 $botman = resolve('botman');
 
 // ---------------------------------------
-// Simple Chat ------------------
+// 1. BASIC - Simple Chat ------------------
 // ---------------------------------------
 $botman->hears('hi|hello|hey', function ($bot) {
     $bot->reply('Hello!');
@@ -17,14 +17,16 @@ $botman->hears('hi|hello|hey', function ($bot) {
 
 
 // ---------------------------------------
-// Campturing User Response ---------
+// 2. BASIC - Capturing User Input ---------
 // ---------------------------------------
 $botman->hears('My name is (.*)', function ($bot, $name) {
     $bot->reply('Hello '.ucfirst($name).'!');
 });
 
 
-// Add a task with a conversation
+// ---------------------------------------
+// 3. BASIC - Having a Conversation and Database Integration ------------------
+// ---------------------------------------
 $botman->hears('Add a task', function ($bot) {
     $bot->ask('What is the name of the new task?', function ($answer, $conversation) {
         Task::create([
@@ -84,7 +86,7 @@ $botman->hears('Delete task {id}', function($bot, $id) {
 
 
 // ---------------------------------------
-// Conversations ---------
+// Other Conversation Examples ---------
 // ---------------------------------------
 $botman->hears('Lunch|OrderLunch', function ($bot) {
     $bot->startConversation(new App\Conversations\LunchConversation);
@@ -96,7 +98,7 @@ $botman->hears('Survey', function ($bot) {
 
 
 // ---------------------------------------
-// Using APIs - Get current weather ---------
+// 4. Using APIs - Get current weather ---------
 // ---------------------------------------
 $botman->hears('Weather in {location}(.*)', function ($bot, $location) {
     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
@@ -119,7 +121,28 @@ $botman->hears('{days} day forecast in {location}', function ($bot, $days, $loca
 
 
 // ---------------------------------------
-// Using Alexa ---------
+// 5. Messaging Platform Slide ---------
+// ---------------------------------------
+
+
+// ---------------------------------------
+// 6. Using NLP Slide ---------
+// ---------------------------------------
+// $dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
+// $botman->middleware->received($dialogflow);
+
+// $botman->hears('weathersearch', function ($bot) {
+//     $extras = $bot->getMessage()->getExtras();
+//     $location = $extras['apiParameters']['geo-city'];
+
+//     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
+//     $response = json_decode(file_get_contents($url));
+//     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
+//     $bot->reply('With a condition of '.$response->current->condition->text);
+// })->middleware($dialogflow);
+
+// ---------------------------------------
+// 7. Using Alexa Slide ---------
 // ---------------------------------------
 $botman->hears('showtasks', function ($bot) {
     $tasks = Task::where('completed', false)
@@ -247,18 +270,3 @@ $botman->fallback(function($bot) {
 //     }
 // });
 
-// ---------------------------------------
-// Using NPL ---------
-// ---------------------------------------
-// $dialogflow = Dialogflow::create(env('DL_TOKEN'))->listenForAction();
-// $botman->middleware->received($dialogflow);
-
-// $botman->hears('weathersearch', function ($bot) {
-//     $extras = $bot->getMessage()->getExtras();
-//     $location = $extras['apiParameters']['geo-city'];
-
-//     $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
-//     $response = json_decode(file_get_contents($url));
-//     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
-//     $bot->reply('With a condition of '.$response->current->condition->text);
-// })->middleware($dialogflow);
