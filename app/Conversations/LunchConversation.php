@@ -24,10 +24,10 @@ class LunchConversation extends Conversation
 
             $this->say('Nice to meet you, '.ucfirst($this->name));
             
-            $menu = Question::create('Here is the menu - google.com, reply with "Ready" to order')
+            $menu = Question::create('Are you ready to submit your lunch order?')
                 ->addButtons([
-                    Button::create('Ready to order')->value('ready'),
-                    Button::create('Need more time')->value('needmoretime'),
+                    Button::create('Ready to order!')->value('ready'),
+                    Button::create('Need more time!!')->value('needmoretime'),
                 ]);
 
             $this->ask($menu, function ($answer) {
