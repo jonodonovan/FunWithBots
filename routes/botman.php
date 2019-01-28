@@ -107,7 +107,6 @@ $botman->hears('Weather in {location}(.*)', function ($bot, $location) {
     $bot->reply('With a condition of '.$response->current->condition->text);
 });
 
-
 // Get forecast for multiple days
 $botman->hears('{days} day forecast in {location}', function ($bot, $days, $location) {
     $url = 'https://api.apixu.com/v1/forecast.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location).'&days='.urlencode($days);
@@ -140,6 +139,7 @@ $botman->hears('{days} day forecast in {location}', function ($bot, $days, $loca
 //     $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
 //     $bot->reply('With a condition of '.$response->current->condition->text);
 // })->middleware($dialogflow);
+
 
 // ---------------------------------------
 // 7. Using Alexa Slide ---------
