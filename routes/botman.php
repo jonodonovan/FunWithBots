@@ -43,7 +43,7 @@ $botman->hears('Show my tasks', function ($bot) {
     $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
-    
+
     if (count($tasks) > 0) {
         $results = '';
         foreach ($tasks as $key =>$task) {
@@ -56,7 +56,7 @@ $botman->hears('Show my tasks', function ($bot) {
 });
 
 
-// Complete a task 
+// Complete a task
 $botman->hears('Task completed {id}', function ($bot, $id) {
     $task = Task::find($id);
 
@@ -71,7 +71,7 @@ $botman->hears('Task completed {id}', function ($bot, $id) {
 });
 
 
-// Delete a task 
+// Delete a task
 $botman->hears('Delete task {id}', function($bot, $id) {
     $task = Task::find($id);
 
@@ -101,10 +101,10 @@ $botman->hears('Survey', function ($bot) {
 // 4. Using APIs - Get current weather ---------
 // ---------------------------------------
 $botman->hears('Weather in {location}(.*)', function ($bot, $location) {
-    $url = 'https://api.apixu.com/v1/current.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location);
+    $url = 'http://api.weatherstack.com/current?access_key='.env('APIXU_TOKEN').'&query='.urlencode($location).'&units=f';
     $response = json_decode(file_get_contents($url));
-    $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temp_f.'°');
-    $bot->reply('With a condition of '.$response->current->condition->text);
+    $bot->reply('The current weather in '.$response->location->name.' is '.$response->current->temperature.'°');
+    // $bot->reply('With a condition of '.$response->current->weather_descriptions);
 });
 
 // Get forecast for multiple days
@@ -112,7 +112,7 @@ $botman->hears('{days} day forecast in {location}', function ($bot, $days, $loca
     $url = 'https://api.apixu.com/v1/forecast.json?key='.env('APIXU_TOKEN').'&q='.urlencode($location).'&days='.urlencode($days);
     $response = json_decode(file_get_contents($url));
     $bot->reply('Temperature in '.$response->location->name.' for the next '.$days.' days:');
-    
+
     foreach ($response->forecast->forecastday as $forecastday) {
         $bot->reply(date('D', $forecastday->date_epoch).' the '.date('jS', $forecastday->date_epoch).' is '.strval($forecastday->day->maxtemp_f));
     }
@@ -148,9 +148,9 @@ $botman->hears('showtasks', function ($bot) {
     $tasks = Task::where('completed', false)
         ->where('user_id', $bot->getMessage()->getSender())
         ->get();
-    
+
     if (count($tasks) > 0) {
-        
+
         $results = '';
         foreach ($tasks as $key =>$task) {
             $results .= $task->id.' - '.$task->task.",\n";
@@ -259,7 +259,7 @@ $botman->fallback(function($bot) {
 // Show all tasks that are completed
 // $botman->hears('Show tasks', function ($bot) {
 //     $tasks = Task::where('completed', false)->get();
-    
+
 //     if (count($tasks) > 0) {
 //         $bot->reply('Your tasks are:');
 //         foreach ($tasks as $task) {
@@ -269,4 +269,3 @@ $botman->fallback(function($bot) {
 //         $bot->reply('You do not have any tasks.');
 //     }
 // });
-
